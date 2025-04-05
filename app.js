@@ -1,11 +1,14 @@
 const start = document.getElementById("start") ;
 const stop = document.getElementById("stop") ;
 const reset = document.getElementById("reset") ;
+const tab = document.getElementById("tab-timer") ;
 const timer = document.getElementById("timer") ;
+const userTime = document.getElementById("user-input") ;
 
 const ringSound = new Audio('ring_sound.mp3') ;
 
 let timeLeft = 1500 ; 
+
 let interval ; 
 
 const updateTimer = () => {
@@ -16,9 +19,25 @@ const updateTimer = () => {
         ${minutes.toString().padStart(2,"0")}
         :
         ${seconds.toString().padStart(2,"0")}` ;
+
+    tab.innerHTML = `
+        ${minutes.toString().padStart(2,"0")}
+        :
+        ${seconds.toString().padStart(2,"0")}` ;
+
 };
 
 const startTimer = () => {
+
+    const userMinutes = parseInt(userTime.value) ;
+
+    if(!isNaN(userMinutes) && userMinutes > 0)
+    {
+        timeLeft = userMinutes * 60 ; 
+    }
+
+    if (interval) return ;
+
     interval = setInterval(() => {
             timeLeft-- ;
             updateTimer() ;
@@ -40,7 +59,10 @@ const stopTimer = () => clearInterval(interval) ;
 
 const resetTimer = () => {
     clearInterval(interval) ;
-    timeLeft = 1500 ; 
+    interval = null ;
+
+    const userMinutes = parseInt(userTime.value) ;
+    timeLeft = (!isNaN(userMinutes) && userMinutes > 0) ? userMinutes * 60 : 1500 ; 
     updateTimer() ;
 }
 
